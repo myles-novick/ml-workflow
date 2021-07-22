@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
 from fastapi import APIRouter, Depends, Query, status
@@ -18,13 +17,10 @@ from utils.feature_utils import (_alter_feature_set, _create_feature_set,
                                    _deploy_feature_set, _get_feature_sets,
                                    _update_feature_set, delete_feature_set,
                                    drop_feature_set_table)
-from utils.pipeline_utils.pipeline_utils import (_alter_pipe, _create_pipe,
-                                                   _get_source, _update_pipe,
-                                                   create_pipeline_entities,
-                                                   generate_backfill_intervals,
-                                                   generate_backfill_sql,
-                                                   generate_pipeline_sql, _update_pipeline, _alter_pipeline,
-                                                   _undeploy_pipeline, _deploy_pipeline, _create_pipeline)
+from utils.pipeline_utils.pipeline_utils import (_alter_pipe, _create_pipe, _update_pipe, 
+                                                    _update_pipeline, _alter_pipeline,
+                                                    _undeploy_pipeline, _deploy_pipeline, 
+                                                    _create_pipeline)
 from utils.training_utils import (_get_training_set,
                                     _get_training_set_from_view,
                                     _get_training_view_by_name, dict_to_lower,
