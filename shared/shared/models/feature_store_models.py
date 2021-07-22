@@ -478,42 +478,6 @@ class DeploymentFeatureStats(SQLAlchemyClient().SpliceBase):
     )
 
 
-class Source(SQLAlchemyClient().SpliceBase):
-    """
-    This table keeps track of sources of Feature Set tables. This table contains Sources that are defined in SQL, and
-    are used to schedule Pipelines to continuously update those Feature Sets (typically using Airflow)
-    """
-    __tablename__: str = "SOURCE"  # Reserved word listed in sqlalchemy so it needs to be uppercase
-    source_id: Column = Column(Integer, primary_key=True, autoincrement=True)
-    name: Column = Column(String(128), unique=True)
-    sql_text: Column = Column(Text)
-    # The name of the column from source that indicates the business time which is used for window aggregations
-    event_ts_column: Column = Column(String(128))
-    # The name of the column from source that we filter on to get the latest extract of data
-    update_ts_column: Column = Column(String(128))
-    last_update_ts: Column = Column(DateTime, server_default=(TextClause("CURRENT_TIMESTAMP")), nullable=False)
-    last_update_username: Column = Column(String(128), nullable=False, server_default=TextClause("CURRENT_USER"))
-
-    __table_args__ = (
-        {'schema': 'featurestore'}
-    )
-
-
-class SourceKey(SQLAlchemyClient().SpliceBase):
-    """
-    This table holds the "primary keys" of the source query. Meaning the uniquely identifying column(s) of a Source query
-    """
-    __tablename__: str = "source_key"
-    source_id: Column = Column(Integer, ForeignKey(Source.source_id), primary_key=True)
-    key_column_name: Column = Column(String(128), primary_key=True)
-    last_update_ts: Column = Column(DateTime, server_default=(TextClause("CURRENT_TIMESTAMP")), nullable=False)
-    last_update_username: Column = Column(String(128), nullable=False, server_default=TextClause("CURRENT_USER"))
-
-    __table_args__ = (
-        {'schema': 'featurestore'}
-    )
-
-
 class Pipe(SQLAlchemyClient().SpliceBase):
     """
     This table keeps track of individual Pipes that can be chained together to form Pipelines. Pipes represent some function applied to data
@@ -612,41 +576,6 @@ class PipelineSequence(SQLAlchemyClient.SpliceBase):
     )
 
 
-class PipelineOps(SQLAlchemyClient().SpliceBase):
-    """
-    This table holds the maximum timestamp extracted from a Source feeding a Feature Set. Every time a Pipeline runs
-    for a Source -> Feature Set, this timestamp is used as the filter
-    ie
-        INSERT INTO FeatureSet SELECT FROM Source WHERE ts_col > extract_up_to_ts
-    """
-    __tablename__: str = "pipeline_ops"
-    feature_set_id: Column = Column(Integer, primary_key=True)
-    extract_up_to_ts: Column = Column(DateTime)
-    __table_args__ = (
-        {'schema': 'featurestore'}
-    )
-
-
-class PipelineAgg(SQLAlchemyClient().SpliceBase):
-    """
-    This table holds the aggregations that are performed on a Source column to create Features (via the
-    FeatureAggregation class)
-    """
-    __tablename__: str = "pipeline_agg"
-    feature_set_id: Column = Column(Integer, primary_key=True)
-    feature_name_prefix: Column = Column(String(128), primary_key=True)
-    column_name: Column = Column(String(128))
-    agg_functions: Column = Column(String(50))
-    agg_windows: Column = Column(String(255))
-    agg_default_value: Column = Column(Numeric)
-    last_update_ts: Column = Column(DateTime, server_default=(TextClause("CURRENT_TIMESTAMP")), nullable=False)
-    last_update_username: Column = Column(String(128), nullable=False, server_default=TextClause("CURRENT_USER"))
-    __table_args__ = (
-        UniqueConstraint(feature_set_id, column_name),
-        {'schema': 'featurestore'}
-    )
-
-
 def create_deploy_historian():
     @event.listens_for(DeploymentHistory.__table__, 'after_create')
     def create_feature_hisorian_trigger(*args, **kwargs):
@@ -660,7 +589,7 @@ def create_deploy_historian():
 TABLES = [FeatureSet, FeatureSetVersion, PendingFeatureSetDeployment, FeatureSetKey, Feature, FeatureVersion, FeatureStats, 
           TrainingView, TrainingViewVersion, TrainingViewKey, TrainingSet, TrainingSetInstance, TrainingSetFeature, 
           TrainingSetFeatureStats, TrainingSetLabelStats, Deployment, DeploymentHistory, DeploymentFeatureStats, 
-          Source, SourceKey, Pipe, PipeVersion, Pipeline, PipelineVersion, PipelineSequence, PipelineOps, PipelineAgg]
+          Pipe, PipeVersion, Pipeline, PipelineVersion, PipelineSequence,]
 
 
 def create_feature_store_tables(_sleep_secs=1) -> None:

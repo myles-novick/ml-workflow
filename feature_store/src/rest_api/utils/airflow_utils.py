@@ -127,30 +127,11 @@ class Airflow:
                 raise SpliceMachineException(status_code=error.response.status_code, code=ExceptionCodes.UNKNOWN,
                                              message=str(error))
 
-    # @staticmethod
-    # def deploy_pipeline(pipeline: schemas.PipelineDetail, fset: str):
-    #     value = { 'schedule_interval': pipeline.pipeline_interval, 'start_date': pipeline.pipeline_start_date.strftime('%Y-%m-%d'),
-    #                 'feature_set': fset
-    #     }
-    #     Airflow.create_or_update_variable(Variables.PIPELINES, pipeline.dag_name, value)
-
-    # @staticmethod
-    # def undeploy_pipeline(pipeline: schemas.PipelineDetail):
-    #     Airflow.remove_from_variable(Variables.PIPELINES, pipeline.dag_name)
-
-    # @staticmethod
-    # def undeploy_pipelines(pipelines: List[str]):
-    #     Airflow.remove_multiple_from_variable(Variables.PIPELINES, pipelines)
-
     @staticmethod
     def get_dag_url(name: str, version: int):
         if not Airflow.EXTERNAL_UI:
             return None
         return Airflow.EXTERNAL_UI + f'/dag_details?dag_id={name}_v{version}'
-
-    @staticmethod
-    def __get_dag_name(pipeline: schemas.PipelineDetail):
-        return f'{pipeline.name}_v{pipeline.pipeline_version}'
 
     @staticmethod
     def setup():

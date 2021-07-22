@@ -244,10 +244,9 @@ def delete_feature_set(db: Session, feature_set_id: int, version: int = None, pu
         logger.info("Removing training sets")
         crud.delete_training_sets(db, training_sets)
 
-    if Airflow.is_active:
-        # Remove pipeline dependencies
-        logger.info("Removing any Pipeline dependencies")
-        crud.remove_feature_set_pipelines(db, feature_set_id, version, delete=purge)
+    # Remove pipeline dependencies
+    logger.info("Removing any Pipeline dependencies")
+    crud.remove_feature_set_pipelines(db, feature_set_id, version, delete=purge)
 
     # Delete features
     logger.info("Removing features")
