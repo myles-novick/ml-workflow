@@ -204,45 +204,6 @@ class TrainingViewDetail(TrainingView, TrainingViewVersion):
     join_columns: Optional[List[str]] = None
     features: Optional[List[FeatureDetail]] = None
 
-class Source(BaseModel):
-    name: str
-    sql_text: str
-    event_ts_column: str
-    update_ts_column: str
-    source_id: Optional[int] = None
-    pk_columns: List[str]
-
-# class Pipeline(BaseModel):
-#     feature_set_id: int
-#     source_id: int
-#     pipeline_start_ts: datetime
-#     pipeline_interval: str
-#     backfill_start_ts: datetime
-#     backfill_interval: str
-#     pipeline_url: str
-#     last_update_ts: datetime
-#     last_update_username: str
-#     class Config:
-#         orm_mode = True
-
-class FeatureAggregation(BaseModel):
-    column_name: str
-    agg_functions: List[str]
-    agg_windows: List[str]
-    feature_name_prefix: Optional[str] = None
-    agg_default_value: Optional[float] = None
-
-class SourceFeatureSetAgg(BaseModel):
-    source_name: str
-    schema_name: str
-    table_name: str
-    start_time: datetime
-    schedule_interval: str
-    aggregations: List[FeatureAggregation]
-    backfill_start_time: Optional[datetime] = None
-    backfill_interval: Optional[str] = None
-    description: Optional[str] = None
-
 # Basically just for neat documentation
 class FeatureTimeframe(BaseModel):
     features: Union[List[Feature], List[str]] = None
@@ -355,7 +316,7 @@ class PipeDetail(Pipe, PipeVersion):
 
 class PipelineBase(BaseModel):
     pipeline_start_date: date
-    pipeline_interval: str
+    pipeline_interval: Optional[str] = None
 
 class PipelineAlter(BaseModel):
     description: Optional[str] = None
@@ -389,6 +350,7 @@ class PipelineVersion(PipelineBase):
 
 class PipelineDetail(Pipeline, PipelineVersion):
     pipes: Optional[List[PipeDetail]] = None
+    feature_set: Optional[str] = None
 
     @property
     def dag_name(self):
