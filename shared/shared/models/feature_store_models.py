@@ -588,7 +588,7 @@ def create_deploy_historian():
 
 TABLES = [FeatureSet, FeatureSetVersion, PendingFeatureSetDeployment, FeatureSetKey, Feature, FeatureVersion, FeatureStats, 
           TrainingView, TrainingViewVersion, TrainingViewKey, TrainingSet, TrainingSetInstance, TrainingSetFeature, 
-          TrainingSetFeatureStats, TrainingSetLabelStats, Deployment, DeploymentHistory, DeploymentFeatureStats, 
+          TrainingSetFeatureStats, TrainingSetLabelStats, #Deployment, DeploymentHistory, DeploymentFeatureStats,
           Pipe, PipeVersion, Pipeline, PipelineVersion, PipelineSequence,]
 
 
@@ -603,6 +603,7 @@ def create_feature_store_tables(_sleep_secs=1) -> None:
 
     # noinspection PyBroadException
     try:
+        SQLAlchemyClient().engine.execute('create schema if not exists featurestore')
         create_deploy_historian()
         logger.warning("Creating Feature Store Splice Tables inside Splice DB...")
         SQLAlchemyClient().SpliceBase.metadata.create_all(checkfirst=True, tables=[t.__table__ for t in TABLES])

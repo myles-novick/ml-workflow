@@ -38,7 +38,7 @@ fi
 
 if [[ "$DB_PORT" == "" ]]
 then
-    export DB_PORT=1527
+    export DB_PORT=5432
 fi
 
 if [[ "$TASK_NAME" == "" ]]
@@ -65,8 +65,8 @@ then
     export MODE="development"
 fi
 
-echo "Starting Java Gateway Server for py4j"
-nohup java gateway &
+#echo "Starting Java Gateway Server for py4j"
+#nohup java gateway &
 
 cd ${SRC_HOME}/rest_api
 

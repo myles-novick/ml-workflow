@@ -14,7 +14,7 @@ class DatabaseConnectionConfig:
     database_name: str = env_vars.get("DB_DATABASE_NAME", "splicedb")
     database_schema: str = env_vars['DB_USER'].upper()
     database_user: str = env_vars['DB_USER']
-    database_port: str = env_vars.get('SPLICEDB_HREGION_SERVICE_PORT_JDBC', '1527')
+    database_port: str = env_vars.get('DB_PORT', '5432')
     database_password: str = env_vars['DB_PASSWORD']
     database_host: str = env_vars['DB_HOST']
 
@@ -24,7 +24,7 @@ class DatabaseConnectionConfig:
         Get the SQLAlchemy Connection String
         :return: cnxn string
         """
-        return f"splicemachinesa://{DatabaseConnectionConfig.database_user}:" \
+        return f"postgres://{DatabaseConnectionConfig.database_user}:" \
                f"{DatabaseConnectionConfig.database_password}@{DatabaseConnectionConfig.database_host}:" \
                f"{DatabaseConnectionConfig.database_port}/{DatabaseConnectionConfig.database_name}"
 

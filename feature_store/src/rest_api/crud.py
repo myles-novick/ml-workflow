@@ -1378,6 +1378,9 @@ def register_feature_set_metadata(db: Session, fset: schemas.FeatureSetCreate) -
     db.add(fset_metadata)
     db.flush()
 
+    #FIXME: the last_update_ts isnt getting set -- postgres probably has a diff syntax
+    print(f'\n\n\n\n{fset_metadata.__dict__}\n\n\n\n')
+
     fd = fset.__dict__
     fd.update(fset_metadata.__dict__)
 

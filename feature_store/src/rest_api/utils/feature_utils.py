@@ -88,7 +88,7 @@ def _create_feature_set(fset: schemas.FeatureSetCreate, db: Session):
     crud.validate_feature_set(db, fset)
     logger.info(f'Registering feature set {fset.schema_name}.{fset.table_name} in Feature Store')
     fset_metadata = crud.register_feature_set_metadata(db, fset)
-    fset_version = crud.create_feature_set_version(db, fset_metadata, True)
+    fset_version = crud.create_feature_set_version(db, fset_metadata, use_last_update=True)
     fset_version.__dict__.pop('feature_set_id')
     created_fset = schemas.FeatureSetDetail(**fset_metadata.__dict__, **fset_version.__dict__)
 

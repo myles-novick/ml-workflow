@@ -57,9 +57,9 @@ services:
   feature_store:
     environment:
       DB_HOST: ${DB_HOST:-host.docker.internal}
-      DB_USER: mlmanager
+      DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-admin}
-      DB_DATABASE_NAME: ${DB_DATABASE_NAME:-splicedb}
+      DB_DATABASE_NAME: ${DB_DATABASE_NAME:-postgres}
       ENABLE_CORS_URL: ${ENABLE_CORS_URL}
       FRAMEWORK_NAME: my-framework
       MODE: development
@@ -69,7 +69,7 @@ services:
       AIRFLOW_USER: airflow
       AIRFLOW_PASSWORD: airflow
       AIRFLOW_EXTERNAL_UI: "http://localhost:9876"
-    image: splicemachine/sm_k8_feature_store:0.0.6
+    image: splicemachine/sm_k8_feature_store:0.0.6_pg001
     ports:
       - "8000:8000"
     build:

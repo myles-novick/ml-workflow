@@ -9,7 +9,7 @@ def setup():
     A function that runs before starting up the API server that creates all of the FeatureStore tables in a single thread
     to avoid write-write conflicts.
     """
-    wait_for_runs_table()
+    # wait_for_runs_table()
     logger.info("Creating Feature Store Tables...")
     create_feature_store_tables()
     logger.info("Tables are created")

@@ -69,20 +69,20 @@ class Authentication:
         :param password: (str) the password to validate
         :return: (bool) whether or not the user is authenticated
         """
-        gate = Authentication.create_gateway()
-        java_import(gate.jvm, "com.splicemachine.shiro.SpliceDatabaseRealm.*")
-        realm = gate.jvm.com.splicemachine.shiro.SpliceDatabaseRealm()
-        LOGGER.debug('Connection successful')
-        realm.setServerName(os.environ['DB_HOST'])
-        realm.setServerPort("1527")
-        realm.setDatabaseName("splicedb")
-        # when shiro authentication fails, it throws an error
-        try:
-            LOGGER.debug('Attempting login')
-            realm.initialize(username, password)
-        except Py4JJavaError as e:
-            LOGGER.info('Login Failed')
-            LOGGER.info(f'{e.errmsg}-{type(e)}: {e.java_exception}')
-            return None
+        # gate = Authentication.create_gateway()
+        # java_import(gate.jvm, "com.splicemachine.shiro.SpliceDatabaseRealm.*")
+        # realm = gate.jvm.com.splicemachine.shiro.SpliceDatabaseRealm()
+        # LOGGER.debug('Connection successful')
+        # realm.setServerName(os.environ['DB_HOST'])
+        # realm.setServerPort("1527")
+        # realm.setDatabaseName("splicedb")
+        # # when shiro authentication fails, it throws an error
+        # try:
+        #     LOGGER.debug('Attempting login')
+        #     realm.initialize(username, password)
+        # except Py4JJavaError as e:
+        #     LOGGER.info('Login Failed')
+        #     LOGGER.info(f'{e.errmsg}-{type(e)}: {e.java_exception}')
+        #     return None
         LOGGER.debug('Login successful')
         return username

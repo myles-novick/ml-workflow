@@ -1,5 +1,4 @@
 wget
-openjdk-8-jdk
 libssl-dev
 build-essential
 libffi-dev
